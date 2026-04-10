@@ -78,7 +78,7 @@ class LoginView extends StatelessWidget {
 
   void _goToHome() {
     // Navigate to Home or Survey Flow
-    Get.offAllNamed(AppRoutes.HOME);
+    Get.offAllNamed(AppRoutes.SURVEY_WELCOME);
   }
 
   @override

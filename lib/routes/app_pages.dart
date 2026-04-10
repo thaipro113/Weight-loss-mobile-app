@@ -8,7 +8,15 @@ import '../views/main/main_view.dart';
 import '../views/workout/day_detail_view.dart';
 import '../views/workout/exercise_play_view.dart';
 import '../views/shared/placeholder_view.dart';
-
+import '../views/survey/survey_welcome_view.dart';
+import '../views/survey/survey_goal_view.dart';
+import '../views/survey/survey_focus_area_view.dart';
+import '../views/survey/survey_age_view.dart';
+import '../views/survey/survey_height_view.dart';
+import '../views/survey/survey_weight_view.dart';
+import '../views/survey/survey_frequency_view.dart';
+import '../views/survey/survey_injury_view.dart';
+import '../views/survey/survey_processing_view.dart';
 class AppPages {
   static final pages = [
     GetPage(name: AppRoutes.SPLASH, page: () => const SplashView()),
@@ -19,11 +27,18 @@ class AppPages {
     GetPage(name: AppRoutes.EXERCISE_PLAY, page: () => const ExercisePlayView()),
     
     // --- Survey Flow ---
+    GetPage(name: AppRoutes.SURVEY_WELCOME, page: () => const SurveyWelcomeView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_GOAL, page: () => const SurveyGoalView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_FOCUS_AREA, page: () => const SurveyFocusAreaView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_AGE, page: () => const SurveyAgeView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_HEIGHT, page: () => const SurveyHeightView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_WEIGHT, page: () => const SurveyWeightView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_FREQUENCY, page: () => const SurveyFrequencyView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_INJURY, page: () => const SurveyInjuryView(), transition: Transition.rightToLeft),
+    GetPage(name: AppRoutes.SURVEY_PROCESSING, page: () => const SurveyProcessingView(), transition: Transition.fadeIn),
+    // Missing views fallback to placeholder
     ...[
-      AppRoutes.SURVEY_WELCOME, AppRoutes.SURVEY_GENDER, AppRoutes.SURVEY_GOAL,
-      AppRoutes.SURVEY_FOCUS_AREA, AppRoutes.SURVEY_CURRENT_BODY, AppRoutes.SURVEY_TARGET_BODY,
-      AppRoutes.SURVEY_AGE, AppRoutes.SURVEY_HEIGHT, AppRoutes.SURVEY_WEIGHT,
-      AppRoutes.SURVEY_INJURY, AppRoutes.SURVEY_FREQUENCY, AppRoutes.SURVEY_PROCESSING, AppRoutes.SURVEY_SUCCESS
+      AppRoutes.SURVEY_CURRENT_BODY, AppRoutes.SURVEY_TARGET_BODY, AppRoutes.SURVEY_SUCCESS
     ].map((route) => GetPage(
       name: route, 
       page: () => PlaceholderView(title: 'Khảo sát: ${route.split("/").last.toUpperCase()}', icon: Icons.question_answer)
