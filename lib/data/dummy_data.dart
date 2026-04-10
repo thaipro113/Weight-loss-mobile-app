@@ -10,6 +10,7 @@ class DummyData {
         description: 'Giữ lưng thẳng và hạ thấp cơ thể cho đến khi ngực gần chạm sàn. Đẩy ngược lên vị trí ban đầu.',
         reps: 15,
         isTimeBased: false,
+        imageUrl: 'assets/images/chongday.jpg',
       ),
       Exercise(
         id: 'e2',
@@ -17,6 +18,7 @@ class DummyData {
         description: 'Nằm xấp và gập người lên trên.',
         durationSeconds: 30,
         isTimeBased: true,
+        imageUrl: 'assets/images/gapbung.jpg',
       ),
       Exercise(
         id: 'e3',
@@ -24,6 +26,7 @@ class DummyData {
         description: 'Chống khuỷu tay và giữ thân mình thẳng.',
         durationSeconds: 40,
         isTimeBased: true,
+        imageUrl: 'assets/images/plank.jpg',
       ),
       Exercise(
         id: 'e4',
@@ -31,13 +34,23 @@ class DummyData {
         description: 'Chạy tại chỗ và đẩy đầu gối lên cao nhất có thể.',
         durationSeconds: 30,
         isTimeBased: true,
+        imageUrl: 'assets/images/nangcaodui.jpg',
       ),
       Exercise(
         id: 'e5',
-        title: 'Căng cơ ngực',
-        description: 'Bài tập giãn cơ cuối buổi.',
+        title: 'Leo núi',
+        description: 'Động tác leo núi trên mặt phẳng.',
         durationSeconds: 20,
         isTimeBased: true,
+        imageUrl: 'assets/images/leonui.jpg',
+      ),
+      Exercise(
+        id: 'e6',
+        title: 'Squad',
+        description: 'Gánh đùi, hạ thấp hông.',
+        durationSeconds: 20,
+        isTimeBased: true,
+        imageUrl: 'assets/images/squad.jpg',
       ),
     ];
   }
