@@ -8,17 +8,18 @@ class ReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Get.isDarkMode;
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9), // Light theme
+      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFF9F9F9),
       appBar: AppBar(
-        title: const Text('11 Tháng 4', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 24)),
-        backgroundColor: const Color(0xFFF9F9F9),
+        title: Text('11 Tháng 4', style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black, fontSize: 24)),
+        backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFF9F9F9),
         elevation: 0,
         actions: [
           Row(
             children: [
-              const Text('Sửa', style: TextStyle(color: Colors.black87, fontSize: 16)),
-              const Icon(Icons.arrow_downward, color: Colors.black87, size: 16),
+              Text('Sửa', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16)),
+              Icon(Icons.arrow_downward, color: isDark ? Colors.white70 : Colors.black87, size: 16),
               const SizedBox(width: 16),
             ],
           )
@@ -29,23 +30,23 @@ class ReportView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildActionButtons(),
+            _buildActionButtons(isDark),
             const SizedBox(height: 24),
-            const Text('Mục tiêu Sức khỏe', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Mục tiêu Sức khỏe', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            _buildHealthGoals(),
+            _buildHealthGoals(isDark),
             const SizedBox(height: 32),
-            const Text('Cân nặng hôm nay', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Cân nặng hôm nay', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            _buildTodaysWeight(),
+            _buildTodaysWeight(isDark),
             const SizedBox(height: 32),
-            const Text('Tuần này', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Tuần này', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            _buildThisWeekCards(),
+            _buildThisWeekCards(isDark),
             const SizedBox(height: 32),
-            const Text('Biểu đồ Cân nặng', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Biểu đồ Cân nặng', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            _buildWeightHistoryChart(),
+            _buildWeightHistoryChart(isDark),
             const SizedBox(height: 48),
           ],
         ),
@@ -53,7 +54,7 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(bool isDark) {
     return Column(
       children: [
         SizedBox(
@@ -75,19 +76,19 @@ class ReportView extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Colors.grey[300]!),
+                side: BorderSide(color: isDark ? Colors.grey[800]! : Colors.grey[300]!),
               ),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add, color: Colors.black87, size: 20),
-                SizedBox(width: 8),
-                Text('Thêm hoạt động', style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
+                Icon(Icons.add, color: isDark ? Colors.white70 : Colors.black87, size: 20),
+                const SizedBox(width: 8),
+                Text('Thêm hoạt động', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -96,11 +97,12 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildHealthGoals() {
+  Widget _buildHealthGoals(bool isDark) {
     return Row(
       children: [
         Expanded(
           child: _buildGoalCard(
+            isDark: isDark,
             title: 'BƯỚC CHÂN',
             type: 'Steps',
             current: '0',
@@ -113,6 +115,7 @@ class ReportView extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildGoalCard(
+            isDark: isDark,
             title: 'NƯỚC',
             type: 'Cups',
             current: '0',
@@ -126,11 +129,11 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildGoalCard({required String title, required String type, required String current, required String target, required IconData iconData, required Color color, required double progress}) {
+  Widget _buildGoalCard({required bool isDark, required String title, required String type, required String current, required String target, required IconData iconData, required Color color, required double progress}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
@@ -140,7 +143,7 @@ class ReportView extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Text(title, style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 1.0)),
+            child: Text(title, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 1.0)),
           ),
           const SizedBox(height: 24),
           Stack(
@@ -161,7 +164,7 @@ class ReportView extends StatelessWidget {
                 children: [
                   Icon(iconData, color: color, size: 28),
                   const SizedBox(height: 4),
-                  Text(current, style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(current, style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
                 ],
               )
             ],
@@ -182,11 +185,11 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildTodaysWeight() {
+  Widget _buildTodaysWeight(bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
@@ -205,10 +208,10 @@ class ReportView extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: const [
-                      Text('75.0', style: TextStyle(color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 4),
-                      Text('kg', style: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
+                    children: [
+                      Text('75.0', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 40, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Text('kg', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -283,11 +286,12 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildThisWeekCards() {
+  Widget _buildThisWeekCards(bool isDark) {
     return Row(
       children: [
         Expanded(
           child: _buildBarChartCard(
+            isDark: isDark,
             title: 'Thời lượng',
             value: '0',
             unit: 'phút',
@@ -298,6 +302,7 @@ class ReportView extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildBarChartCard(
+            isDark: isDark,
             title: 'Calo',
             value: '0',
             unit: 'kcal',
@@ -309,12 +314,12 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildBarChartCard({required String title, required String value, required String unit, required Color barColor, required Color highlightColor}) {
+  Widget _buildBarChartCard({required bool isDark, required String title, required String value, required String unit, required Color barColor, required Color highlightColor}) {
     final days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
@@ -326,7 +331,7 @@ class ReportView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: const TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(title, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
               const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 12),
             ],
           ),
@@ -335,9 +340,9 @@ class ReportView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(value, style: const TextStyle(color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
+              Text(value, style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
               const SizedBox(width: 4),
-              Text(unit, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+              Text(unit, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600], fontSize: 14)),
             ],
           ),
           const SizedBox(height: 24),
@@ -375,11 +380,11 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  Widget _buildWeightHistoryChart() {
+  Widget _buildWeightHistoryChart(bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
@@ -398,10 +403,10 @@ class ReportView extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: const [
-                      Text('75.0', style: TextStyle(color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 4),
-                      Text('kg  ✎', style: TextStyle(color: Colors.black87, fontSize: 16)),
+                    children: [
+                      Text('75.0', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Text('kg  ✎', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16)),
                     ],
                   ),
                 ],
@@ -410,7 +415,7 @@ class ReportView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Text('Mục tiêu', style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  const Text('72.0 kg  ✎', style: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('72.0 kg  ✎', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               )
             ],

@@ -11,12 +11,13 @@ class DiscoverMainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Get.isDarkMode;
     return Scaffold(
-      backgroundColor: Colors.white, // Light theme
+      backgroundColor: isDark ? const Color(0xFF121212) : Colors.white, // Dark/Light theme
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('KHÁM PHÁ', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 24, letterSpacing: 1.2)),
+            Text('KHÁM PHÁ', style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black, fontSize: 24, letterSpacing: 1.2)),
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -28,11 +29,11 @@ class DiscoverMainView extends StatelessWidget {
             )
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
+            icon: Icon(Icons.search, color: isDark ? Colors.white : Colors.black),
             onPressed: () {},
           )
         ],
@@ -42,13 +43,13 @@ class DiscoverMainView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            _buildFocusArea(),
+            _buildFocusArea(isDark),
             const SizedBox(height: 24),
             _buildPromoBanners(),
             const SizedBox(height: 24),
-            _buildWorkoutList(),
+            _buildWorkoutList(isDark),
             const SizedBox(height: 24),
-            _buildKegelExercises(),
+            _buildKegelExercises(isDark),
             const SizedBox(height: 48), // Bottom padding
           ],
         ),
@@ -56,7 +57,7 @@ class DiscoverMainView extends StatelessWidget {
     );
   }
 
-  Widget _buildFocusArea() {
+  Widget _buildFocusArea(bool isDark) {
     final areas = [
       {'title': 'Toàn thân', 'img': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'},
       {'title': 'Bụng', 'img': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'},
@@ -68,9 +69,9 @@ class DiscoverMainView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Vùng tập trung', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Vùng tập trung', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -91,7 +92,7 @@ class DiscoverMainView extends StatelessWidget {
                       height: 65,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.grey[200],
+                        color: isDark ? Colors.grey[800] : Colors.grey[200],
                         image: DecorationImage(
                           image: NetworkImage(a['img']!),
                           fit: BoxFit.cover,
@@ -99,7 +100,7 @@ class DiscoverMainView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(a['title']!, style: const TextStyle(color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w600)),
+                    Text(a['title']!, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 13, fontWeight: FontWeight.w600)),
                   ],
                 ),
               );
@@ -153,7 +154,7 @@ class DiscoverMainView extends StatelessWidget {
     );
   }
 
-  Widget _buildWorkoutList() {
+  Widget _buildWorkoutList(bool isDark) {
     final workouts = [
       {'title': 'HIIT đốt mỡ cường độ cao', 'level': 'Trung bình', 'img': 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'},
       {'title': 'HIIT giảm mỡ bụng cơ bản', 'level': 'Cơ bản', 'img': 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'},
@@ -180,9 +181,9 @@ class DiscoverMainView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item['title']!, style: const TextStyle(color: Colors.black87, fontSize: 17, fontWeight: FontWeight.bold)),
+                          Text(item['title']!, style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 17, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 6),
-                          Text(item['level']!, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+                          Text(item['level']!, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600], fontSize: 14)),
                         ],
                       ),
                     ),
@@ -209,7 +210,7 @@ class DiscoverMainView extends StatelessWidget {
     );
   }
 
-  Widget _buildKegelExercises() {
+  Widget _buildKegelExercises(bool isDark) {
     final workouts = [
       {'title': 'Khỏe mạnh dài lâu', 'desc': 'Cơ bản • 5 Phút', 'img': 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
       {'title': 'Thăng hoa cảm xúc', 'desc': 'Nâng cao • 16 Phút', 'img': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
@@ -223,7 +224,7 @@ class DiscoverMainView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Bài tập Kegel', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+              Text('Bài tập Kegel', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
               GestureDetector(
                 onTap: () => Get.to(() => const DiscoverGridDetailView(categoryTitle: 'Bài tập Kegel')),
                 child: const Row(
@@ -248,7 +249,7 @@ class DiscoverMainView extends StatelessWidget {
             separatorBuilder: (_, __) => const SizedBox(width: 16),
             itemBuilder: (context, index) {
               final w = workouts[index];
-              return buildKegelCard(w);
+              return buildKegelCard(w, isDark);
             },
           ),
         ),
@@ -256,7 +257,7 @@ class DiscoverMainView extends StatelessWidget {
     );
   }
 
-  Widget buildKegelCard(Map<String, String> w) {
+  Widget buildKegelCard(Map<String, String> w, bool isDark) {
     return GestureDetector(
       onTap: () => Get.to(() => DiscoverGridDetailView(categoryTitle: w['title']!)),
       child: SizedBox(
@@ -269,9 +270,9 @@ class DiscoverMainView extends StatelessWidget {
               child: Image.network(w['img']!, width: 140, height: 140, fit: BoxFit.cover),
             ),
             const SizedBox(height: 12),
-            Text(w['title']!, style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 15), maxLines: 1),
+            Text(w['title']!, style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold, fontSize: 15), maxLines: 1),
             const SizedBox(height: 4),
-            Text(w['desc']!, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+            Text(w['desc']!, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600], fontSize: 13)),
           ],
         ),
       ),
