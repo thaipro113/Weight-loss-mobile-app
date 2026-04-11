@@ -17,7 +17,26 @@ import '../views/survey/survey_weight_view.dart';
 import '../views/survey/survey_frequency_view.dart';
 import '../views/survey/survey_injury_view.dart';
 import '../views/survey/survey_processing_view.dart';
+import '../views/workout/discover_category_detail_view.dart';
+import '../views/profile/achievements_view.dart';
+import '../views/profile/workout_history_view.dart';
+import '../views/profile/premium_upgrade_view.dart';
+import '../views/profile/help_support_view.dart';
+import '../views/profile/privacy_policy_view.dart';
+
 class AppPages {
+  static String _getCategoryTitle(String route) {
+    if (route == AppRoutes.DISCOVER_ABS) return 'Cơ Bụng';
+    if (route == AppRoutes.DISCOVER_CHEST) return 'Cơ Ngực';
+    if (route == AppRoutes.DISCOVER_ARMS) return 'Cơ Tay';
+    if (route == AppRoutes.DISCOVER_LEGS) return 'Cơ Chân';
+    if (route == AppRoutes.DISCOVER_FULLBODY) return 'Toàn Thân';
+    if (route == AppRoutes.DISCOVER_YOGA) return 'Yoga';
+    if (route == AppRoutes.DISCOVER_HIIT) return 'HIIT';
+    if (route == AppRoutes.DISCOVER_STRETCHING) return 'Giãn Cơ';
+    return route.split("/").last.toUpperCase();
+  }
+
   static final pages = [
     GetPage(name: AppRoutes.SPLASH, page: () => const SplashView()),
     GetPage(name: AppRoutes.ONBOARDING, page: () => const OnboardingView()),
@@ -47,23 +66,37 @@ class AppPages {
     // --- Discover Flow ---
     GetPage(name: AppRoutes.DISCOVER_MAIN, page: () => const PlaceholderView(title: 'Khám Phá', icon: Icons.explore)),
     ...[
-      AppRoutes.DISCOVER_ABS, AppRoutes.DISCOVER_CHEST, AppRoutes.DISCOVER_ARMS,
-      AppRoutes.DISCOVER_LEGS, AppRoutes.DISCOVER_FULLBODY, AppRoutes.DISCOVER_YOGA,
-      AppRoutes.DISCOVER_HIIT, AppRoutes.DISCOVER_STRETCHING, AppRoutes.DISCOVER_CHALLENGES,
+      AppRoutes.DISCOVER_CHALLENGES,
       AppRoutes.DISCOVER_ARTICLES, AppRoutes.DISCOVER_ARTICLE_DETAIL, AppRoutes.DISCOVER_MEAL_PLAN
     ].map((route) => GetPage(
       name: route, 
       page: () => PlaceholderView(title: 'Chuyên mục: ${route.split("/").last.toUpperCase()}', icon: Icons.fitness_center)
     )).toList(),
+    ...[
+      AppRoutes.DISCOVER_ABS, AppRoutes.DISCOVER_CHEST, AppRoutes.DISCOVER_ARMS,
+      AppRoutes.DISCOVER_LEGS, AppRoutes.DISCOVER_FULLBODY, AppRoutes.DISCOVER_YOGA,
+      AppRoutes.DISCOVER_HIIT, AppRoutes.DISCOVER_STRETCHING
+    ].map((route) => GetPage(
+      name: route, 
+      page: () => DiscoverCategoryDetailView(categoryTitle: _getCategoryTitle(route))
+    )).toList(),
 
     // --- Profile & Settings Flow ---
     GetPage(name: AppRoutes.PROFILE_MAIN, page: () => const PlaceholderView(title: 'Hồ sơ cá nhân', icon: Icons.person)),
+    
+    // Explicit Profile Views
+    GetPage(name: AppRoutes.PROFILE_ACHIEVEMENTS, page: () => const AchievementsView()),
+    GetPage(name: AppRoutes.PROFILE_HISTORY, page: () => const WorkoutHistoryView()),
+    GetPage(name: AppRoutes.PROFILE_PREMIUM, page: () => const PremiumUpgradeView()),
+    GetPage(name: AppRoutes.SETTINGS_HELP, page: () => const HelpSupportView()),
+    GetPage(name: AppRoutes.SETTINGS_PRIVACY, page: () => const PrivacyPolicyView()),
+
     ...[
-      AppRoutes.PROFILE_EDIT, AppRoutes.PROFILE_HISTORY, AppRoutes.PROFILE_WEIGHT_TRACKER,
-      AppRoutes.PROFILE_ACHIEVEMENTS, AppRoutes.PROFILE_PREMIUM, AppRoutes.SETTINGS_MAIN,
-      AppRoutes.SETTINGS_REMINDERS, AppRoutes.SETTINGS_SOUNDS, AppRoutes.SETTINGS_LANGUAGE,
-      AppRoutes.SETTINGS_THEME, AppRoutes.SETTINGS_SYNC, AppRoutes.SETTINGS_PRIVACY,
-      AppRoutes.SETTINGS_TERMS, AppRoutes.SETTINGS_HELP, AppRoutes.SETTINGS_CONTACT
+      AppRoutes.PROFILE_EDIT, AppRoutes.PROFILE_WEIGHT_TRACKER,
+      AppRoutes.SETTINGS_MAIN, AppRoutes.SETTINGS_REMINDERS, 
+      AppRoutes.SETTINGS_SOUNDS, AppRoutes.SETTINGS_LANGUAGE,
+      AppRoutes.SETTINGS_THEME, AppRoutes.SETTINGS_SYNC, 
+      AppRoutes.SETTINGS_TERMS, AppRoutes.SETTINGS_CONTACT
     ].map((route) => GetPage(
       name: route, 
       page: () => PlaceholderView(title: 'Hồ sơ & Cài đặt: ${route.split("/").last.toUpperCase()}', icon: Icons.settings)
