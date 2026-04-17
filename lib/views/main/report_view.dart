@@ -130,10 +130,12 @@ class ReportView extends StatelessWidget {
   }
 
   Widget _buildGoalCard({required bool isDark, required String title, required String type, required String current, required String target, required IconData iconData, required Color color, required double progress}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+    return GestureDetector(
+      onTap: () => _showDetail(title, isDark),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
@@ -182,13 +184,15 @@ class ReportView extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildTodaysWeight(bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () => _showDetail('Cân nặng hôm nay', isDark),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -261,7 +265,7 @@ class ReportView extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildMiniWeightChart() {
@@ -316,9 +320,11 @@ class ReportView extends StatelessWidget {
 
   Widget _buildBarChartCard({required bool isDark, required String title, required String value, required String unit, required Color barColor, required Color highlightColor}) {
     final days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () => _showDetail(title, isDark),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -377,13 +383,15 @@ class ReportView extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildWeightHistoryChart(bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () => _showDetail('Lịch sử cân nặng', isDark),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -508,6 +516,141 @@ class ReportView extends StatelessWidget {
           ),
         ],
       ),
+    ));
+  }
+
+  void _showDetail(String title, bool isDark) {
+    String description = '';
+    List<Widget> statWidgets = [];
+
+    switch (title) {
+      case 'BƯỚC CHÂN':
+        description = 'Hôm nay bạn đã đi được 5,000 bước. Cố gắng thêm 3,000 bước nữa để đạt mục tiêu nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Quãng đường', '3.5 km', Colors.green, isDark),
+          _buildMockStatColumn('Calo tiêu hao', '210 kcal', Colors.orange, isDark),
+          _buildMockStatColumn('Thời gian', '45 phút', Colors.blue, isDark),
+        ];
+        break;
+      case 'NƯỚC':
+        description = 'Bạn đã uống 4 cốc nước hôm nay. Hãy nhớ uống đủ nước để cơ thể luôn khỏe trong và ngoài.';
+        statWidgets = [
+          _buildMockStatColumn('Đã uống', '1.0 L', Colors.blueAccent, isDark),
+          _buildMockStatColumn('Mục tiêu', '2.0 L', Colors.blue, isDark),
+          _buildMockStatColumn('Lần cuối', '14:30', Colors.teal, isDark),
+        ];
+        break;
+      case 'Cân nặng hôm nay':
+        description = 'Cân nặng của bạn đang ở mức 75.0 kg, giảm 0.5 kg so với tuần trước. Rất tuyệt vời!';
+        statWidgets = [
+          _buildMockStatColumn('BMI', '23.1', Colors.purple, isDark),
+          _buildMockStatColumn('Mỡ cơ thể', '18%', Colors.redAccent, isDark),
+          _buildMockStatColumn('Cơ bắp', '42 kg', Colors.brown, isDark),
+        ];
+        break;
+      case 'Thời lượng':
+        description = 'Bạn đã tập luyện tổng cộng 120 phút trong tuần này. Cố gắng duy trì thói quen nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Cao nhất', '45 phút', Colors.green, isDark),
+          _buildMockStatColumn('Trung bình', '30 phút', Colors.orange, isDark),
+          _buildMockStatColumn('Số buổi', '4 buổi', Colors.blue, isDark),
+        ];
+        break;
+      case 'Calo':
+        description = 'Lượng calo tiêu hao trung bình tuần này là 500 kcal/ngày. Tiếp tục giữ vững phong độ!';
+        statWidgets = [
+          _buildMockStatColumn('Tiêu hao', '3500 kcal', Colors.red, isDark),
+          _buildMockStatColumn('Nạp vào', '2100 kcal', Colors.orange, isDark),
+          _buildMockStatColumn('Thâm hụt', '1400 kcal', Colors.green, isDark),
+        ];
+        break;
+      case 'Lịch sử cân nặng':
+        description = 'Biểu đồ cân nặng cho thấy bạn đang trên đà giảm cân ổn định. Mục tiêu 72 kg đã rất gần!';
+        statWidgets = [
+          _buildMockStatColumn('Cao nhất', '78 kg', Colors.redAccent, isDark),
+          _buildMockStatColumn('Thấp nhất', '74.5 kg', Colors.green, isDark),
+          _buildMockStatColumn('Tốc độ', '-0.5kg/tuần', Colors.blue, isDark),
+        ];
+        break;
+      default:
+        description = 'Dưới đây là thông tin chi tiết về $title của bạn. Bạn đã duy trì rất tốt trong tuần qua, tiếp tục phát huy nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Hôm nay', 'Tốt', Colors.green, isDark),
+          _buildMockStatColumn('Trung bình', 'Khá', Colors.orange, isDark),
+          _buildMockStatColumn('Mục tiêu', 'Đạt', Colors.blue, isDark),
+        ];
+    }
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Chi tiết: $title',
+              style: TextStyle(
+                color: isDark ? Colors.white : Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              description,
+              style: TextStyle(
+                color: isDark ? Colors.white70 : Colors.black87,
+                fontSize: 16,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: statWidgets,
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1CB5E0),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('Đóng', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMockStatColumn(String label, String value, Color color, bool isDark) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+        const SizedBox(height: 8),
+        Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold)),
+      ],
     );
   }
 }
