@@ -17,6 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Giảm Cân 30 Ngày',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: AppRoutes.SPLASH,
       getPages: AppPages.pages,
       defaultTransition: Transition.cupertino,

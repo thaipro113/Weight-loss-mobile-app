@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
 import '../../theme/app_colors.dart';
 
 class ReportView extends StatelessWidget {
@@ -7,79 +8,634 @@ class ReportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Get.isDarkMode;
     return Scaffold(
+      backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFF9F9F9),
       appBar: AppBar(
-        title: const Text('Báo Cáo Tiến Độ', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('11 Tháng 4', style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black, fontSize: 24)),
+        backgroundColor: isDark ? const Color(0xFF121212) : const Color(0xFFF9F9F9),
+        elevation: 0,
+        actions: [
+          Row(
+            children: [
+              Text('Sửa', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16)),
+              Icon(Icons.arrow_downward, color: isDark ? Colors.white70 : Colors.black87, size: 16),
+              const SizedBox(width: 16),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('BMI Kỉ Lục Của Bạn', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildActionButtons(isDark),
+            const SizedBox(height: 24),
+            Text('Mục tiêu Sức khỏe', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+            _buildHealthGoals(isDark),
+            const SizedBox(height: 32),
+            Text('Cân nặng hôm nay', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            _buildTodaysWeight(isDark),
+            const SizedBox(height: 32),
+            Text('Tuần này', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            _buildThisWeekCards(isDark),
+            const SizedBox(height: 32),
+            Text('Biểu đồ Cân nặng', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            _buildWeightHistoryChart(isDark),
+            const SizedBox(height: 48),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(bool isDark) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1CB5E0),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('Bắt đầu bài tập', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: isDark ? Colors.grey[800]! : Colors.grey[300]!),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add, color: isDark ? Colors.white70 : Colors.black87, size: 20),
+                const SizedBox(width: 8),
+                Text('Thêm hoạt động', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHealthGoals(bool isDark) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildGoalCard(
+            isDark: isDark,
+            title: 'BƯỚC CHÂN',
+            type: 'Steps',
+            current: '0',
+            target: '8000 Bước',
+            iconData: Icons.directions_walk,
+            color: Colors.orange,
+            progress: 0.1,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildGoalCard(
+            isDark: isDark,
+            title: 'NƯỚC',
+            type: 'Cups',
+            current: '0',
+            target: '8 Cốc',
+            iconData: Icons.water_drop,
+            color: Colors.blue,
+            progress: 0.1,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGoalCard({required bool isDark, required String title, required String type, required String current, required String target, required IconData iconData, required Color color, required double progress}) {
+    return GestureDetector(
+      onTap: () => _showDetail(title, isDark),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(title, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontWeight: FontWeight.bold, fontSize: 14, letterSpacing: 1.0)),
+          ),
+          const SizedBox(height: 24),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  value: progress,
+                  strokeWidth: 4,
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(iconData, color: color, size: 28),
+                  const SizedBox(height: 4),
+                  Text(current, style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
+                ],
+              )
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(target, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.lock_open, color: Color(0xFF1CB5E0), size: 16),
+              SizedBox(width: 4),
+              Text('Mở khóa', style: TextStyle(color: Color(0xFF1CB5E0), fontSize: 14, fontWeight: FontWeight.bold)),
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildTodaysWeight(bool isDark) {
+    return GestureDetector(
+      onTap: () => _showDetail('Cân nặng hôm nay', isDark),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text('75.0', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 40, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Text('kg', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Text('+3.0 kg', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+                      Text(' tới Mục tiêu', style: TextStyle(color: Colors.grey)),
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 120,
+                height: 60,
+                child: _buildMiniWeightChart(),
+              )
+            ],
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Icon(Icons.check_circle, color: Colors.green, size: 16),
+                    SizedBox(width: 4),
+                    Text('Đã cập nhật!', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: const Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text('Chỉ số BMI hiện tại:', style: TextStyle(color: AppColors.textSecondary)),
-                        SizedBox(height: 8),
-                        Text('22.5', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primaryDark)),
-                        Text('Bình thường', style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold)),
-                      ],
+                    Text('Thêm', style: TextStyle(color: Color(0xFF1CB5E0), fontSize: 14)),
+                    Icon(Icons.arrow_forward_ios, color: Color(0xFF1CB5E0), size: 12),
+                  ],
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildMiniWeightChart() {
+    return Column(
+      children: [
+         Row(
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           children: const [
+             Text('80 kg', style: TextStyle(color: Colors.grey, fontSize: 10)),
+             Text('75 kg', style: TextStyle(color: Colors.grey, fontSize: 10)),
+             Text('70 kg', style: TextStyle(color: Colors.grey, fontSize: 10)),
+           ],
+         ),
+         const SizedBox(height: 8),
+         Expanded(
+           child: CustomPaint(
+             painter: MiniChartPainter(),
+             child: const SizedBox(width: double.infinity, height: double.infinity),
+           ),
+         ),
+      ],
+    );
+  }
+
+  Widget _buildThisWeekCards(bool isDark) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildBarChartCard(
+            isDark: isDark,
+            title: 'Thời lượng',
+            value: '0',
+            unit: 'phút',
+            barColor: const Color(0xFF4A4A8A),
+            highlightColor: const Color(0xFF5A5AFF), 
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildBarChartCard(
+            isDark: isDark,
+            title: 'Calo',
+            value: '0',
+            unit: 'kcal',
+            barColor: const Color(0xFF8B4513),
+            highlightColor: const Color(0xFFD2691E),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBarChartCard({required bool isDark, required String title, required String value, required String unit, required Color barColor, required Color highlightColor}) {
+    final days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    return GestureDetector(
+      onTap: () => _showDetail(title, isDark),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16, fontWeight: FontWeight.bold)),
+              const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 12),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(value, style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 4),
+              Text(unit, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600], fontSize: 14)),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(7, (index) {
+              return Column(
+                children: [
+                  Container(
+                    width: 12,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    const Icon(Icons.monitor_weight, size: 60, color: AppColors.primaryLight),
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 12,
+                      height: 8, // mock minimal value
+                      decoration: BoxDecoration(
+                        color: index == 6 ? highlightColor : barColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(days[index], style: TextStyle(color: index == 6 ? highlightColor : Colors.grey[500], fontSize: 10)),
+                  if (index == 6) Icon(Icons.arrow_drop_up, color: highlightColor, size: 12),
+                ],
+              );
+            }),
+          )
+        ],
+      ),
+    ));
+  }
+
+  Widget _buildWeightHistoryChart(bool isDark) {
+    return GestureDetector(
+      onTap: () => _showDetail('Lịch sử cân nặng', isDark),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Hiện tại', style: TextStyle(color: Colors.grey, fontSize: 14)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text('75.0', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Text('kg  ✎', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 16)),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text('Mục tiêu', style: TextStyle(color: Colors.grey, fontSize: 14)),
+                  Text('72.0 kg  ✎', style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)),
+                ],
+              )
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Text('Tháng Tư', style: TextStyle(color: Colors.grey, fontSize: 12)),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 200,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) => FlLine(color: Colors.grey.withOpacity(0.2), strokeWidth: 1, dashArray: [5, 5]),
+                ),
+                titlesData: FlTitlesData(
+                  show: true,
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 40,
+                      interval: 2.5,
+                      getTitlesWidget: (value, meta) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(value.toStringAsFixed(1), style: TextStyle(color: Colors.grey[500], fontSize: 10), textAlign: TextAlign.right),
+                        );
+                      },
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(value.toInt().toString(), style: TextStyle(color: Colors.grey[500], fontSize: 10)),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                borderData: FlBorderData(show: false),
+                minX: 8,
+                maxX: 14,
+                minY: 70,
+                maxY: 80,
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: const [FlSpot(11, 75.0)], // Mock dot for 11 Apr
+                    isCurved: true,
+                    color: Colors.greenAccent,
+                    barWidth: 2,
+                    isStrokeCapRound: true,
+                    dotData: FlDotData(
+                      show: true,
+                      checkToShowDot: (spot, barData) => true,
+                      getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
+                        radius: 4,
+                        color: Colors.grey[800]!,
+                        strokeWidth: 2,
+                        strokeColor: Colors.greenAccent,
+                      ),
+                    ),
+                    belowBarData: BarAreaData(show: false),
+                  ),
+                ],
+                extraLinesData: ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: 72,
+                      color: Colors.teal.withOpacity(0.5),
+                      strokeWidth: 1,
+                      dashArray: [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        alignment: Alignment.bottomLeft,
+                        style: const TextStyle(color: Colors.teal, fontSize: 10),
+                        labelResolver: (line) => 'Mục tiêu',
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Text('Lịch Sử Tập Luyện (Tuần)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Card(
+          ),
+        ],
+      ),
+    ));
+  }
+
+  void _showDetail(String title, bool isDark) {
+    String description = '';
+    List<Widget> statWidgets = [];
+
+    switch (title) {
+      case 'BƯỚC CHÂN':
+        description = 'Hôm nay bạn đã đi được 5,000 bước. Cố gắng thêm 3,000 bước nữa để đạt mục tiêu nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Quãng đường', '3.5 km', Colors.green, isDark),
+          _buildMockStatColumn('Calo tiêu hao', '210 kcal', Colors.orange, isDark),
+          _buildMockStatColumn('Thời gian', '45 phút', Colors.blue, isDark),
+        ];
+        break;
+      case 'NƯỚC':
+        description = 'Bạn đã uống 4 cốc nước hôm nay. Hãy nhớ uống đủ nước để cơ thể luôn khỏe trong và ngoài.';
+        statWidgets = [
+          _buildMockStatColumn('Đã uống', '1.0 L', Colors.blueAccent, isDark),
+          _buildMockStatColumn('Mục tiêu', '2.0 L', Colors.blue, isDark),
+          _buildMockStatColumn('Lần cuối', '14:30', Colors.teal, isDark),
+        ];
+        break;
+      case 'Cân nặng hôm nay':
+        description = 'Cân nặng của bạn đang ở mức 75.0 kg, giảm 0.5 kg so với tuần trước. Rất tuyệt vời!';
+        statWidgets = [
+          _buildMockStatColumn('BMI', '23.1', Colors.purple, isDark),
+          _buildMockStatColumn('Mỡ cơ thể', '18%', Colors.redAccent, isDark),
+          _buildMockStatColumn('Cơ bắp', '42 kg', Colors.brown, isDark),
+        ];
+        break;
+      case 'Thời lượng':
+        description = 'Bạn đã tập luyện tổng cộng 120 phút trong tuần này. Cố gắng duy trì thói quen nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Cao nhất', '45 phút', Colors.green, isDark),
+          _buildMockStatColumn('Trung bình', '30 phút', Colors.orange, isDark),
+          _buildMockStatColumn('Số buổi', '4 buổi', Colors.blue, isDark),
+        ];
+        break;
+      case 'Calo':
+        description = 'Lượng calo tiêu hao trung bình tuần này là 500 kcal/ngày. Tiếp tục giữ vững phong độ!';
+        statWidgets = [
+          _buildMockStatColumn('Tiêu hao', '3500 kcal', Colors.red, isDark),
+          _buildMockStatColumn('Nạp vào', '2100 kcal', Colors.orange, isDark),
+          _buildMockStatColumn('Thâm hụt', '1400 kcal', Colors.green, isDark),
+        ];
+        break;
+      case 'Lịch sử cân nặng':
+        description = 'Biểu đồ cân nặng cho thấy bạn đang trên đà giảm cân ổn định. Mục tiêu 72 kg đã rất gần!';
+        statWidgets = [
+          _buildMockStatColumn('Cao nhất', '78 kg', Colors.redAccent, isDark),
+          _buildMockStatColumn('Thấp nhất', '74.5 kg', Colors.green, isDark),
+          _buildMockStatColumn('Tốc độ', '-0.5kg/tuần', Colors.blue, isDark),
+        ];
+        break;
+      default:
+        description = 'Dưới đây là thông tin chi tiết về $title của bạn. Bạn đã duy trì rất tốt trong tuần qua, tiếp tục phát huy nhé!';
+        statWidgets = [
+          _buildMockStatColumn('Hôm nay', 'Tốt', Colors.green, isDark),
+          _buildMockStatColumn('Trung bình', 'Khá', Colors.orange, isDark),
+          _buildMockStatColumn('Mục tiêu', 'Đạt', Colors.blue, isDark),
+        ];
+    }
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
               child: Container(
-                height: 200,
-                padding: const EdgeInsets.all(16),
-                child: BarChart(
-                  BarChartData(
-                    alignment: BarChartAlignment.spaceAround,
-                    maxY: 60,
-                    barTouchData: BarTouchData(enabled: false),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            const titles = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(titles[value.toInt()], style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-                            );
-                          },
-                        ),
-                      ),
-                      leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    ),
-                    borderData: FlBorderData(show: false),
-                    barGroups: [
-                      _makeGroupData(0, 15),
-                      _makeGroupData(1, 25),
-                      _makeGroupData(2, 20),
-                      _makeGroupData(3, 30),
-                      _makeGroupData(4, 45),
-                      _makeGroupData(5, 50),
-                      _makeGroupData(6, 10),
-                    ],
-                  ),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(2),
                 ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Chi tiết: $title',
+              style: TextStyle(
+                color: isDark ? Colors.white : Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              description,
+              style: TextStyle(
+                color: isDark ? Colors.white70 : Colors.black87,
+                fontSize: 16,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: statWidgets,
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1CB5E0),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('Đóng', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -88,17 +644,50 @@ class ReportView extends StatelessWidget {
     );
   }
 
-  BarChartGroupData _makeGroupData(int x, double y) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: AppColors.primary,
-          width: 16,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-        ),
+  Widget _buildMockStatColumn(String label, String value, Color color, bool isDark) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+        const SizedBox(height: 8),
+        Text(value, style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold)),
       ],
     );
   }
+}
+
+class MiniChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paintLine = Paint()
+      ..color = Colors.teal.withOpacity(0.5)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+    
+    double startX = 0;
+    while(startX < size.width) {
+      canvas.drawLine(Offset(startX, size.height * 0.7), Offset(startX + 3, size.height * 0.7), paintLine);
+      startX += 6;
+    }
+
+    final paintLabel = TextPainter(
+      text: const TextSpan(text: 'Mục tiêu', style: TextStyle(color: Colors.teal, fontSize: 10)),
+      textDirection: TextDirection.ltr,
+    );
+    paintLabel.layout();
+    paintLabel.paint(canvas, Offset(0, size.height * 0.7 + 2));
+
+    final paintDot = Paint()..color = Colors.greenAccent..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(size.width * 0.6, size.height * 0.3), 3, paintDot);
+    
+    final days = ['8', '9', '10', '11', '12', '13', '14'];
+    double stepX = size.width / 7;
+    for (int i = 0; i < days.length; i++) {
+        final pt = TextPainter(text: TextSpan(text: days[i], style: TextStyle(color: Colors.grey[600], fontSize: 8)), textDirection: TextDirection.ltr);
+        pt.layout();
+        pt.paint(canvas, Offset(i * stepX, size.height * 0.9));
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

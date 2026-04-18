@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 
-class SettingsView extends StatelessWidget {
+import 'package:get/get.dart';
+
+class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
 
   @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  // Trạng thái các cài đặt
+  bool _isTrainingReminderEnabled = true;
+  bool _isAudioGuideEnabled = true;
+  
+  @override
   Widget build(BuildContext context) {
+    final isDarkMode = Get.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cài Đặt', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -25,8 +38,15 @@ class SettingsView extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.notifications),
             title: const Text('Nhắc nhở tập luyện'),
-            trailing: Switch(value: true, onChanged: (v) {}, activeColor: AppColors.primary),
+            trailing: Switch(
+              value: _isTrainingReminderEnabled,
+              onChanged: (v) {
+                setState(() => _isTrainingReminderEnabled = v);
+              },
+              activeColor: AppColors.primary,
+            ),
           ),
+
           const Divider(),
           const Padding(
             padding: EdgeInsets.all(16.0),
@@ -35,7 +55,13 @@ class SettingsView extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.volume_up),
             title: const Text('Âm thanh hướng dẫn'),
-            trailing: Switch(value: true, onChanged: (v) {}, activeColor: AppColors.primary),
+            trailing: Switch(
+              value: _isAudioGuideEnabled,
+              onChanged: (v) {
+                setState(() => _isAudioGuideEnabled = v);
+              },
+              activeColor: AppColors.primary,
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.timer),

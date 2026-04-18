@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'home_view.dart';
 import 'discover_main_view.dart';
 import 'report_view.dart';
@@ -27,6 +28,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Get.isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         selectedItemColor: AppColors.primary,

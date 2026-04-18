@@ -61,7 +61,7 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
-
+// tuongtac
   Widget _buildProgressHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
