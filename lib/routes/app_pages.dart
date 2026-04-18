@@ -23,6 +23,7 @@ import '../views/profile/workout_history_view.dart';
 import '../views/profile/premium_upgrade_view.dart';
 import '../views/profile/help_support_view.dart';
 import '../views/profile/privacy_policy_view.dart';
+import '../views/profile/weight_tracker_view.dart';
 
 class AppPages {
   static String _getCategoryTitle(String route) {
@@ -90,9 +91,10 @@ class AppPages {
     GetPage(name: AppRoutes.PROFILE_PREMIUM, page: () => const PremiumUpgradeView()),
     GetPage(name: AppRoutes.SETTINGS_HELP, page: () => const HelpSupportView()),
     GetPage(name: AppRoutes.SETTINGS_PRIVACY, page: () => const PrivacyPolicyView()),
+    GetPage(name: AppRoutes.PROFILE_WEIGHT_TRACKER, page: () => const WeightTrackerView()),
 
     ...[
-      AppRoutes.PROFILE_EDIT, AppRoutes.PROFILE_WEIGHT_TRACKER,
+      AppRoutes.PROFILE_EDIT,
       AppRoutes.SETTINGS_MAIN, AppRoutes.SETTINGS_REMINDERS, 
       AppRoutes.SETTINGS_SOUNDS, AppRoutes.SETTINGS_LANGUAGE,
       AppRoutes.SETTINGS_THEME, AppRoutes.SETTINGS_SYNC, 
